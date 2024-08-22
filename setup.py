@@ -14,6 +14,4 @@ setup(
     packages=find_packages(),
     install_requires=parse_requirements('requirements.txt'),
     dependency_links=parse_dependency_links('requirements.txt'),
-    package_dir={'': 'dpfm_model_runners'}
-
 )
