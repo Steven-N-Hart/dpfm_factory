@@ -1,9 +1,9 @@
 import logging
 import os
-from .Autoclass import AutoclassLoader
-from .virchow2 import VirchowLoader
-from .conch import ConchLoader
-from .provgigapath import ProvGigaPathLoader
+from .autoclass_runner import AutoclassLoader
+from .virchow2_runner import VirchowLoader
+from .conch_runner import ConchLoader
+from .provgigapath_runner import ProvGigaPathLoader
 from dotenv import load_dotenv
 from huggingface_hub import login
 

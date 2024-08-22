@@ -1,4 +1,4 @@
-from conch.open_clip_custom import create_model_from_pretrained
+from conch_fork.open_clip_custom import create_model_from_pretrained
 import torch
 
 class ConchLoader:

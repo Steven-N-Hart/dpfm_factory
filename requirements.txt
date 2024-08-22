@@ -4,4 +4,4 @@ timm
 tqdm
 torch
 transformers
-git+https://github.com/Mahmoodlab/CONCH.git#egg=CONCH
+conch-fork
