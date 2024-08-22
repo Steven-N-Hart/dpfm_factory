@@ -1,0 +1,7 @@
+huggingface_hub
+python-dotenv
+timm
+tqdm
+torch
+transformers
+git+https://github.com/Mahmoodlab/CONCH.git
