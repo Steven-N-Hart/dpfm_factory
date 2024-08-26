@@ -2,10 +2,10 @@ from transformers import AutoImageProcessor, AutoModel
 import torch
 
 class AutoclassLoader:
-    def __init__(self, model_name, use_fast=True):
+    def __init__(self, model_name, use_fast=True,  trust_remote_code=True):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.processor = AutoImageProcessor.from_pretrained(model_name, use_fast=use_fast)
-        self.model = AutoModel.from_pretrained(model_name).to(device)
+        self.processor = AutoImageProcessor.from_pretrained(model_name, use_fast=use_fast,  trust_remote_code=trust_remote_code)
+        self.model = AutoModel.from_pretrained(model_name,  trust_remote_code=trust_remote_code).to(self.device)
 
     def get_processor_and_model(self):
         return self.processor, self.model

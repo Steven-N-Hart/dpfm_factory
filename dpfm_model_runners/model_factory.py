@@ -4,6 +4,7 @@ from .autoclass_runner import AutoclassLoader
 from .virchow2_runner import VirchowLoader
 from .conch_runner import ConchLoader
 from .provgigapath_runner import ProvGigaPathLoader
+from .exaonepath_runner import EXAONEPathLoader
 from dotenv import load_dotenv
 from huggingface_hub import login
 
@@ -36,6 +37,9 @@ def model_factory(model_name=None):
             'paige-ai/Virchow2'
             'MahmoodLab/conch'
             'prov-gigapath/prov-gigapath'
+            'LGAI-EXAONE/EXAONEPath'
+            'histai/hibou-L'
+            'histai/hibou-b'
         * If model_name is None or an unsupported model name, an error will be raised.
 
     Returns:
@@ -55,8 +59,7 @@ def model_factory(model_name=None):
         return model, processor, model_class.get_image_embedding
 
     elif model_name.startswith('histai/hibou'):
-        raise NotImplementedError('histai/hibou models not yet implemented do to bug in their deployment, see here: https://github.com/HistAI/hibou/issues/3')
-        model_class = AutoclassLoader(model_name=model_name)
+        model_class = AutoclassLoader(model_name=model_name, use_fast=False)
         processor, model = model_class.get_processor_and_model()
         return model, processor, model_class.get_image_embedding
 
@@ -72,6 +75,11 @@ def model_factory(model_name=None):
 
     elif model_name == 'prov-gigapath/prov-gigapath':
         model_class = ProvGigaPathLoader()
+        processor, model = model_class.get_processor_and_model()
+        return model, processor, model_class.get_image_embedding
+
+    elif model_name == 'LGAI-EXAONE/EXAONEPath':
+        model_class = EXAONEPathLoader(hf_token=huggingface_token)
         processor, model = model_class.get_processor_and_model()
         return model, processor, model_class.get_image_embedding
 

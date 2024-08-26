@@ -56,6 +56,10 @@ The model_factory function currently supports the following models:
  * paige-ai/Virchow2
  * MahmoodLab/conch
  * prov-gigapath/prov-gigapath
+ * LGAI-EXAONE/EXAONEPath
+ * histai/hibou-L
+ * histai/hibou-b
+
 
 ## Error Handling
 If an unsupported model name is provided, the model_factory will raise a NotImplementedError. For example:
