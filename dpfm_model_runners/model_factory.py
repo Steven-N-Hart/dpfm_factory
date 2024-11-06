@@ -5,6 +5,7 @@ from .virchow2_runner import VirchowLoader
 from .conch_runner import ConchLoader
 from .provgigapath_runner import ProvGigaPathLoader
 from .exaonepath_runner import EXAONEPathLoader
+from .google_runner import GoogleLoader
 from dotenv import load_dotenv
 from huggingface_hub import login
 
@@ -80,6 +81,11 @@ def model_factory(model_name=None):
 
     elif model_name == 'LGAI-EXAONE/EXAONEPath':
         model_class = EXAONEPathLoader(hf_token=huggingface_token)
+        processor, model = model_class.get_processor_and_model()
+        return model, processor, model_class.get_image_embedding
+
+    elif model_name == 'google':
+        model_class = GoogleLoader()
         processor, model = model_class.get_processor_and_model()
         return model, processor, model_class.get_image_embedding
 

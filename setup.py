@@ -10,13 +10,13 @@ def parse_dependency_links(filename):
 
 setup(
     name="dpfm_factory",
-    version="0.6",
+    version="0.7",
     author="Steven N. Hart",
     author_email="Hart.Steven@Mayo.edu",
     description="Helper scripts for digital pathology foundation models",
     long_description=open('README.md').read(),  # Make sure you have a README.md file
     long_description_content_type="text/markdown",  # Specify that README is in Markdown
-    packages=find_packages(),
+    packages=find_packages(include=['dpfm_factory', 'dpfm_factory.*']),
     install_requires=parse_requirements('requirements.txt'),
     dependency_links=parse_dependency_links('requirements.txt'),
 )
