@@ -2,11 +2,11 @@ import torch
 from torchstain.base.normalizers.he_normalizer import HENormalizer
 from torchstain.torch.utils import cov, percentile
 import torch.nn as nn
-from huggingface_hub import PyTorchModelHubMixin, HfApi
-import os, sys
+from huggingface_hub import PyTorchModelHubMixin
 import math
 from functools import partial
 import warnings
+import importlib.resources as resources
 
 from PIL import Image
 import torchvision.transforms as transforms
@@ -22,9 +22,9 @@ class ToTensorCheck(transforms.ToTensor):
 class EXAONEPathLoader:
     def __init__(self, model_name="LGAI-EXAONE/EXAONEPath", hf_token=None):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
         # Initialize the model with proper layers and activation
         self.model = VisionTransformer.from_pretrained(model_name, use_auth_token=hf_token)
+        self.model = self.model.to(self.device)
         self.model.eval()
 
         # Setup the preprocessing transforms
@@ -44,7 +44,7 @@ class EXAONEPathLoader:
     # Function to get image embedding
     def get_image_embedding(self, image, processor, model, device):
         normalizer = macenko_normalizer()
-        norm_img = normalizer(image)
+        norm_img = normalizer(image).to(device)
         image_tensor = processor(norm_img).unsqueeze(0).to(device)
         with torch.no_grad():
             output = model(image_tensor).squeeze()
@@ -208,11 +208,11 @@ class TorchMacenkoNormalizer(HENormalizer):
 
 class macenko_normalizer():
     def __init__(self, target_path=None):
-        script_directory = os.path.dirname(__file__)
-        if target_path is None:
-            target_path = os.path.join(script_directory,'macenko_target.png')
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        # Load the image from the package's data directory using importlib_resources
+        with resources.path('dpfm_model_runners.data', 'macenko_target.png') as target_path:
+            self.target = Image.open(target_path)
 
-        self.target = Image.open(target_path)
         self.transform_before_macenko = transforms.Compose([
             ToTensorCheck(),
             transforms.Lambda(lambda x: x * 255)
@@ -226,12 +226,12 @@ class macenko_normalizer():
             image_macenko, _, _ = self.normalizer.normalize(I=t_to_transform, stains=False, form='chw', dtype='float')
             if torch.any(torch.isnan(image_macenko)):
                 Warning("NaN values found in image after Macenko normalization. Returning original image.")
-                return transforms.ToTensor()(image)
+                return transforms.ToTensor()(image).to(self.device)
             else:
-                return image_macenko
+                return image_macenko.to(self.device)
         except Exception as e:
             print(str(e))
-            return transforms.ToTensor()(image)
+            return transforms.ToTensor()(image).to(self.device)
 
 ########################################################################################
 ### vision_transformer.py
