@@ -52,14 +52,18 @@ print("Image Embedding:", image_embedding)
 ## Supported Models
 The model_factory function currently supports the following models:
 
- * owkin/phikon
- * paige-ai/Virchow2
- * MahmoodLab/conch
- * prov-gigapath/prov-gigapath
- * LGAI-EXAONE/EXAONEPath
- * histai/hibou-L
- * histai/hibou-b
+ * [owkin/phikon](https://www.medrxiv.org/content/10.1101/2023.07.21.23292757v1)
+ * [paige-ai/Virchow2](https://arxiv.org/abs/2408.00738)
+ * [MahmoodLab/conch](https://www.nature.com/articles/s41591-024-02856-4)
+ * [prov-gigapath/prov-gigapath](https://www.nature.com/articles/s41586-024-07441-w)
+ * [LGAI-EXAONE/EXAONEPath](https://arxiv.org/abs/2408.00380)
+ * [histai/hibou-L](https://arxiv.org/html/2406.05074v1)
+ * [histai/hibou-b](https://arxiv.org/html/2406.05074v1)
+ * [google/PathFoundation](https://arxiv.org/abs/2310.13259)
 
+> Note: Some of these models require a HuggingFace Token that has been approved by the model owner. The Google model 
+> also requires submitters to sign additional Terms of Service.
+ 
 
 ## Error Handling
 If an unsupported model name is provided, the model_factory will raise a NotImplementedError. For example:

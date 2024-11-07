@@ -41,6 +41,7 @@ def model_factory(model_name=None):
             'LGAI-EXAONE/EXAONEPath'
             'histai/hibou-L'
             'histai/hibou-b'
+            'google/PathFoundation'
         * If model_name is None or an unsupported model name, an error will be raised.
 
     Returns:
@@ -84,7 +85,7 @@ def model_factory(model_name=None):
         processor, model = model_class.get_processor_and_model()
         return model, processor, model_class.get_image_embedding
 
-    elif model_name == 'google':
+    elif model_name == 'google/PathFoundation':
         model_class = GoogleLoader()
         processor, model = model_class.get_processor_and_model()
         return model, processor, model_class.get_image_embedding

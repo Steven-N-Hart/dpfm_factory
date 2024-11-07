@@ -24,7 +24,6 @@ class GoogleLoader:
         image = local_image.LocalImage(image)
         # Define coordinates of image patch
         patch = image.get_patch(x=0, y=0, width=224, height=224)
-
         embedding = patch_embedding.get_patch_embedding(self.endpoint, patch)
         return embedding
 
