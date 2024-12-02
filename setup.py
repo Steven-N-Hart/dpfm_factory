@@ -10,7 +10,7 @@ def parse_dependency_links(filename):
 
 setup(
     name="dpfm_factory",
-    version="0.8.5",
+    version="0.8.6",
     author="Steven N. Hart",
     author_email="Hart.Steven@Mayo.edu",
     description="Helper scripts for digital pathology foundation models",
