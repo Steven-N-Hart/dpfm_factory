@@ -37,7 +37,7 @@ class GoogleLoader:
 
 
     # Function to get image embedding
-    def get_image_embedding(self, image):
+    def get_image_embedding(self, image, processor, model, device):
         image_tensor = self.processor(image)
 
         embeddings = self.model(image_tensor)
