@@ -1,31 +1,45 @@
-from ez_wsi_dicomweb import credential_factory, patch_embedding_endpoints, patch_embedding, local_image
+from huggingface_hub import hf_hub_download, from_pretrained_keras
+import tensorflow as tf
+import numpy as np
+import keras.layers as kl
+import os
 
 class GoogleLoader:
-    def __init__(self):
-        self.credentials = credential_factory.DefaultCredentialFactory()
-        self.endpoint = patch_embedding_endpoints.V2PatchEmbeddingEndpoint(credential_factory=self.credentials)
+    def __init__(self, model_name="google/path-foundation"):
+        model_path = hf_hub_download(repo_id="google/path-foundation", filename='saved_model.pb')
+        # Load the model directly from Hugging Face Hub
+        # Use TFSMLayer to load the SavedModel for inference
+        self.model = kl.TFSMLayer(os.path.dirname(model_path), call_endpoint='serving_default')
+        self.processor = self.create_processor()
+        self.device = 1 if tf.config.list_physical_devices('GPU') else 0
 
-        def preprocess(img):
-            return img
-        def create_model(img):
-            model = patch_embedding.get_patch_embedding(self.endpoint, img)
-            return model
+    @staticmethod
+    def create_processor():
+        """Returns a processor function for resizing and normalizing numpy arrays."""
+        def processor(image_array):
+            if not isinstance(image_array, np.ndarray):
+                raise ValueError("Input must be a numpy array.")
+            # Ensure the array has three channels (H, W, C)
+            if image_array.ndim != 3 or image_array.shape[2] != 3:
+                raise ValueError("Input numpy array must have shape (H, W, 3).")
+            # Convert image to float32 and normalize to [0, 1]
+            image_array = image_array.astype('float32') / 255.0
 
-        self.model = create_model
-        self.processor = preprocess
+            # Resize to (224, 224)
+            image_tensor = tf.image.resize(image_array, (224, 224))
+
+            # Add batch dimension
+            return tf.expand_dims(image_tensor, axis=0)
+        return processor
 
     def get_processor_and_model(self):
         return self.processor, self.model
 
 
     # Function to get image embedding
-    def get_image_embedding(self, image, processor=None, model=None, device=None):
-        # Construct an image from the in memory patch
-        image = local_image.LocalImage(image)
-        # Define coordinates of image patch
-        patch = image.get_patch(x=0, y=0, width=224, height=224)
-        embedding = patch_embedding.get_patch_embedding(self.endpoint, patch)
-        return embedding
+    def get_image_embedding(self, image):
+        image_tensor = self.processor(image)
 
+        embeddings = self.model(image_tensor)
 
-
+        return np.squeeze(embeddings["output_0"])

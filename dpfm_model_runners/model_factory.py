@@ -22,7 +22,7 @@ if huggingface_token:
     login(huggingface_token)
     logger.info("Successfully authenticated with Hugging Face.")
 else:
-    logger.warn("HUGGINGFACE_TOKEN not found. Please check your .env file.")
+    logger.warning("HUGGINGFACE_TOKEN not found. Please check your .env file.")
 
 
 def model_factory(model_name=None):
@@ -85,7 +85,7 @@ def model_factory(model_name=None):
         processor, model = model_class.get_processor_and_model()
         return model, processor, model_class.get_image_embedding
 
-    elif model_name == 'google/PathFoundation':
+    elif model_name == 'google/path-foundation':
         model_class = GoogleLoader()
         processor, model = model_class.get_processor_and_model()
         return model, processor, model_class.get_image_embedding

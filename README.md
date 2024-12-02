@@ -59,7 +59,7 @@ The model_factory function currently supports the following models:
  * [LGAI-EXAONE/EXAONEPath](https://arxiv.org/abs/2408.00380)
  * [histai/hibou-L](https://arxiv.org/html/2406.05074v1)
  * [histai/hibou-b](https://arxiv.org/html/2406.05074v1)
- * [google/PathFoundation](https://arxiv.org/abs/2310.13259)
+ * [google/path-foundation](https://huggingface.co/google/path-foundation)
 
 > Note: Some of these models require a HuggingFace Token that has been approved by the model owner. The Google model 
 > also requires submitters to sign additional Terms of Service.
