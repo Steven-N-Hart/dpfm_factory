@@ -11,6 +11,6 @@ your_image = np.asarray(Image.open(img_path))
 model, processor, get_image_embedding = model_factory(model_name=model_name)
 
 # Example usage with an image (replace 'your_image' with actual image data)
-image_embedding = get_image_embedding(your_image)
+image_embedding = get_image_embedding(your_image, processor, model, 'gpu')
 
 print("Image Embedding:", image_embedding.shape)

@@ -3,13 +3,15 @@ import tensorflow as tf
 import numpy as np
 import keras.layers as kl
 import os
+from PIL import Image
 
 class GoogleLoader:
     def __init__(self, model_name="google/path-foundation"):
-        model_path = hf_hub_download(repo_id="google/path-foundation", filename='saved_model.pb')
+        #model_path = hf_hub_download(repo_id="google/path-foundation", filename='saved_model.pb', local_dir='hub/google')
+        model_path ='hub/google'
         # Load the model directly from Hugging Face Hub
         # Use TFSMLayer to load the SavedModel for inference
-        self.model = kl.TFSMLayer(os.path.dirname(model_path), call_endpoint='serving_default')
+        self.model = kl.TFSMLayer(model_path, call_endpoint='serving_default')
         self.processor = self.create_processor()
         self.device = 1 if tf.config.list_physical_devices('GPU') else 0
 
@@ -17,6 +19,8 @@ class GoogleLoader:
     def create_processor():
         """Returns a processor function for resizing and normalizing numpy arrays."""
         def processor(image_array):
+            if isinstance(image_array, Image.Image):
+                image_array = np.array(image_array)
             if not isinstance(image_array, np.ndarray):
                 raise ValueError("Input must be a numpy array.")
             # Ensure the array has three channels (H, W, C)
