@@ -4,14 +4,22 @@ import numpy as np
 import keras.layers as kl
 import os
 from PIL import Image
+import re
 
 class GoogleLoader:
     def __init__(self, model_name="google/path-foundation"):
-        #model_path = hf_hub_download(repo_id="google/path-foundation", filename='saved_model.pb', local_dir='hub/google')
-        model_path ='hub/google'
-        # Load the model directly from Hugging Face Hub
-        # Use TFSMLayer to load the SavedModel for inference
-        self.model = kl.TFSMLayer(model_path, call_endpoint='serving_default')
+
+        try:
+            # Load the model directly from Hugging Face Hub
+            loaded_model = from_pretrained_keras("google/path-foundation")
+            self.model = loaded_model.signatures["serving_default"]
+        except ValueError as e:
+            # Use TFSMLayer to load the SavedModel for inference
+            model_string = ' '.join(e.args[0].split()[47:50]).replace('`','').replace('use ','')
+            match = re.match(r'keras\.layers\.TFSMLayer\(([^,]+), call_endpoint=\'([^\']+)\'\)', model_string)
+            model_path = match.group(1).strip()
+            call_endpoint = match.group(2).strip()
+            self.model = kl.TFSMLayer(model_path, call_endpoint=call_endpoint)
         self.processor = self.create_processor()
         self.device = 1 if tf.config.list_physical_devices('GPU') else 0
 

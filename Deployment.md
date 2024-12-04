@@ -3,7 +3,7 @@ del .\build\
 del .\dist\
 del .\dpfm_factory.egg-info\
 
-python setup.py sdist bdist_wheel  
+python -m build  
 twine upload --repository testpypi dist/*    
 ```
 
