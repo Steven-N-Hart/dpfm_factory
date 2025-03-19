@@ -1,3 +1,4 @@
+httpx
 huggingface_hub>=0.26.2
 importlib_resources
 python-dotenv

@@ -2,10 +2,10 @@ import logging
 import os
 from .autoclass_runner import AutoclassLoader
 from .virchow2_runner import VirchowLoader
-from .conch_runner import ConchLoader
+#from .conch_runner import ConchLoader
 from .provgigapath_runner import ProvGigaPathLoader
 from .exaonepath_runner import EXAONEPathLoader
-from .google_runner import GoogleLoader
+from .atlas_runner import AtlasLoader
 from dotenv import load_dotenv
 from huggingface_hub import login
 
@@ -41,7 +41,7 @@ def model_factory(model_name=None):
             'LGAI-EXAONE/EXAONEPath'
             'histai/hibou-L'
             'histai/hibou-b'
-            'google/PathFoundation'
+            'mayo/ATLAS'
         * If model_name is None or an unsupported model name, an error will be raised.
 
     Returns:
@@ -85,8 +85,8 @@ def model_factory(model_name=None):
         processor, model = model_class.get_processor_and_model()
         return model, processor, model_class.get_image_embedding
 
-    elif model_name == 'google/path-foundation':
-        model_class = GoogleLoader()
+    elif model_name == 'mayo/ATLAS':
+        model_class = AtlasLoader()
         processor, model = model_class.get_processor_and_model()
         return model, processor, model_class.get_image_embedding
 
