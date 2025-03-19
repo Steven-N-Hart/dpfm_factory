@@ -2,7 +2,7 @@ import logging
 import os
 from .autoclass_runner import AutoclassLoader
 from .virchow2_runner import VirchowLoader
-#from .conch_runner import ConchLoader
+from .conch_runner import ConchLoader
 from .provgigapath_runner import ProvGigaPathLoader
 from .exaonepath_runner import EXAONEPathLoader
 from .atlas_runner import AtlasLoader
